@@ -19,9 +19,10 @@ export const AppRouter = () => {
   let pv=false;
   try {
     flag = getItem("l1");
-    pv = getItem("l1");
+   
     if(flag){
       user = JSON.parse(desencrypta(JSON.parse(String(getItem("l2"))))) as any;
+      pv = JSON.parse(desencrypta(JSON.parse(String(getItem("l6"))))) as any; 
     }else{
 
     }
@@ -36,43 +37,43 @@ export const AppRouter = () => {
           <Route
             path="/inicio"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Bienvenido /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/investigacion"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Investigacion /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/inteligencia"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Inteligencia /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/analisis"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Analisis /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/confianza"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Confianza /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/veritas"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Veritas /> : <Navigate to="/" replace />}
           ></Route>
           <Route
             path="/usuarios"
             element={
-              !pv ? <Navigate to="/sinein/cp" replace />  :
+              pv ? <Navigate to="/sinein/cp" replace />  :
               flag ? <Usuarios /> : <Navigate to="/" replace />}
           ></Route>
           <Route
