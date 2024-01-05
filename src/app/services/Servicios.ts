@@ -13,6 +13,10 @@ export class Servicios {
     return await post("logout", data);
   }
 
+  public static async logoutuser(data: any) {
+    return await post("logoutuser", data);
+  }
+
   public static async obtenerDoc(data: any) {
     return await postDoc("obtenerDoc", data);
   }

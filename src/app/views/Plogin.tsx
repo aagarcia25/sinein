@@ -10,16 +10,17 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundImg from "../assets/img/backgroundImg.jpg"; // Importa la imagen desde tu carpeta assets
 
 import logo from "../assets/img/logop.png";
 import { AlertS } from "../helpers/AlertS";
-import { encrypta } from "../helpers/cifrado";
+import { desencrypta, encrypta, encryptalaravel } from "../helpers/cifrado";
 import { Servicios } from "../services/Servicios";
-import { setItem } from "../services/localStorage";
+import { getItem, setItem } from "../services/localStorage";
 import Progress from "./share/Progress";
+import Swal from "sweetalert2";
 
 export const Plogin = () => {
   const navigate = useNavigate();
@@ -28,6 +29,28 @@ export const Plogin = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
+
+  const logout = async () => {
+    try {
+      let data = {
+        nombreUsuario: encryptalaravel(username), 
+      };
+      const res = await Servicios.logoutuser(data);
+      if (res.SUCCESS) {
+        localStorage.clear();
+        navigate("/sinein");
+      } else {
+        throw new Error("No response from the server");
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Ocurrió un error durante el cierre de sesión.",
+        icon: "error",
+      });
+    } finally {
+    }
+  };
 
   const login = () => {
     setslideropen(true);
@@ -44,25 +67,84 @@ export const Plogin = () => {
           setItem(encrypta(JSON.stringify(res.RESPONSE.User)), "l2");
           setItem(encrypta(JSON.stringify(res.RESPONSE.Roles)), "l3");
           setItem(encrypta(JSON.stringify(res.RESPONSE.User.Id)), "l5");
-          navigate("/sinein/inicio");
+          setItem(encrypta(JSON.stringify(res.RESPONSE.User.bp)), "l6");
+          if(res.RESPONSE.User.bp){
+            navigate("/sinein/inicio");
+          }else{
+            AlertS.fire({
+              title: "¡Aviso!",
+              text: "Contraseña Vencida, Favor de Realizar el Cambio",
+              icon: "error",
+            });
+            navigate("/sinein/cp");
+          }
+
+
+         
+
+
         } else {
+          if(res.NUMCODE==2525){
+
+            Swal.fire({
+              title: "Sessiones Activas",
+              text:  "Usuario ya cuenta con una Sessión Activa, Desea Cerrar Sessión en los otros Navegadores?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "SI",
+              cancelButtonText:"No"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                logout();
+              }
+            });
+            
+
+          }else{
+            AlertS.fire({
+              title: "¡Error!",
+              text: res.STRMESSAGE,
+              icon: "error",
+            });
+          }
+
+        
+        }
+        setslideropen(false);
+      } else {
+        setslideropen(false);
+        if(res.NUMCODE==429){
           AlertS.fire({
             title: "¡Error!",
             text: res.STRMESSAGE,
             icon: "error",
           });
+        }else{
+          AlertS.fire({
+            title: "¡Error!",
+            text: "Sin Respuesta",
+            icon: "error",
+          });
         }
-        setslideropen(false);
-      } else {
-        setslideropen(false);
-        AlertS.fire({
-          title: "¡Error!",
-          text: "Sin Respuesta",
-          icon: "error",
-        });
+       
       }
     });
   };
+
+  useEffect(() => {
+    let flag;
+    try {
+      
+      flag = getItem("l1");
+      if(flag){
+        navigate("/sinein/inicio");
+      }
+    } catch (error) {
+      navigate("/sinein/");
+    }
+  }, []);
 
   return (
     <div>

@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import ModalForm from "../../share/ModalForm";
-import Progress from "../../share/Progress";
-import CloseIcon from "@mui/icons-material/Close";
 import AddTaskIcon from "@mui/icons-material/AddTask";
+import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Dayjs } from "dayjs";
+import { useEffect, useState } from "react";
+import { AlertS } from "../../../helpers/AlertS";
 import { useLoadFilter } from "../../../hook/select";
 import { SelectValues } from "../../../interfaces/Share";
 import { Servicios } from "../../../services/Servicios";
-import { AlertS } from "../../../helpers/AlertS";
 import { getItem } from "../../../services/localStorage";
-import SelectFrag from "../../share/SelectFrag";
-import { Dayjs } from "dayjs";
 import CustomizedDate from "../../share/CustomizedDate";
+import ModalForm from "../../share/ModalForm";
+import Progress from "../../share/Progress";
+import SelectFrag from "../../share/SelectFrag";
 export const AnalisisModal = ({
   handleClose,
   tipo,
@@ -22,7 +22,6 @@ export const AnalisisModal = ({
   dt: any;
 }) => {
   const [show, setShow] = useState(false);
-  const [listopcion, setlistopcion] = useState<SelectValues[]>([]);
   const [id, setid] = useState("");
   const [Lugar, setLugar] = useState("");
   const [Dia, setDia] = useState("");

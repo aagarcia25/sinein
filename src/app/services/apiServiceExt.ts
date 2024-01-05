@@ -31,8 +31,8 @@ const handleResponse = (response: any) => {
     rs = {
       RESPONSE: "",
       SUCCESS: false,
-      NUMCODE: 0,
-      STRMESSAGE: "Demasiados Intente, Cuenta Bloqueada por 10 minutos",
+      NUMCODE: 429,
+      STRMESSAGE: "Demasiados Intentos, Cuenta Bloqueada por 10 minutos",
     };
   }
 

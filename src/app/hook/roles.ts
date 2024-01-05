@@ -8,7 +8,6 @@ export const loadRol = () => {
 
     // Verificar si la clave "l3" existe en localStorage
     if (!encryptedData) {
-      console.error("La clave 'l3' no existe en localStorage");
       return;
     }
 
@@ -16,7 +15,6 @@ export const loadRol = () => {
 
     // Verificar si el resultado de desencriptar es nulo o indefinido
     if (!decryptedData) {
-      console.error("Error al desencriptar los datos");
       return;
     }
 

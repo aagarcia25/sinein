@@ -158,13 +158,31 @@ export default function Inicio({ children }: Props) {
     debounce: 500, // Tiempo de espera antes de considerar la aplicación inactiva después de un evento de actividad
   });
 
-  useEffect(() => {
+ /* useEffect(() => {
     try {
       setRol(desencrypta(JSON.parse(String(getItem("l4")))));
     } catch (error) {
       console.error("Error al procesar los datos:", error);
     }
-  }, []);
+  }, []);*/
+  useEffect(() => {
+  const obtenerRolDesencriptado = async () => {
+    try {
+      const rolEncriptado = getItem("l4");
+      if (!rolEncriptado) {
+        throw new Error("No se encontró el rol encriptado en el almacenamiento local");
+      }
+
+      const rolDesencriptado = desencrypta(JSON.parse(String(rolEncriptado)));
+      setRol(rolDesencriptado);
+    } catch (error) {
+      console.error("Error al procesar los datos:");
+      navigate("/sinein/");
+    } 
+  
+  };
+  obtenerRolDesencriptado();
+}, []); 
 
   return (
     <div>
