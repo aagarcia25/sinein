@@ -196,7 +196,7 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
             variant="outlined"
             onChange={handlePasswordChange}
             autoComplete="off"
-          //  onPaste={(e) => e.preventDefault()} // Prevenir la acción de pegar
+            onPaste={(e) => e.preventDefault()} // Prevenir la acción de pegar
           />
 
           {passwordError && (
@@ -225,7 +225,7 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
             error={IsValid}
             helperText={IsValid ? "Las Contraseñas No son iguales" : ""}
             autoComplete="off"
-           // onPaste={(e) => e.preventDefault()} // Prevenir la acción de pegar
+            onPaste={(e) => e.preventDefault()} // Prevenir la acción de pegar
 
           
           />
