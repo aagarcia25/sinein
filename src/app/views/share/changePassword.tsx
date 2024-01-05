@@ -26,6 +26,7 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
+    const isNotEqualSystem = password.toLowerCase() !== currentPassword.toLowerCase();
     const hasConsecutiveChars = /(.)\1\1/.test(password); // Nueva regla
 
     // La longitud de la contraseña debe estar entre minLength y maxLength
@@ -100,7 +101,11 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
       );
     }
 
-   
+    if (  newPassword.toLowerCase() === currentPassword.toLowerCase()) {
+      errorMessages.push(
+        "No debe ser igual a la contraseña Actual"
+      );
+    }
 
     
 
