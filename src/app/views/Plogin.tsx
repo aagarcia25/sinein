@@ -60,7 +60,7 @@ export const Plogin = () => {
     };
 
     Servicios.login(data).then((res) => {
-      console.log(res);
+     // console.log(res);
       if (res.SUCCESS) {
         if (res.RESPONSE.login) {
           setItem(true, "l1");

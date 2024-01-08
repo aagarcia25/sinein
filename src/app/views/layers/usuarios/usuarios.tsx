@@ -27,7 +27,7 @@ export const Usuarios = () => {
     };
 
     Servicios.usuarios(data).then((res) => {
-      console.log(res);
+      //console.log(res);
       if (res.SUCCESS) {
         setData(res.RESPONSE);
         setShow(false);

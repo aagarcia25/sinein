@@ -47,7 +47,7 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
   const verifypassword = (e: any) => {
     const ver = e.target.value;
     setConfirmPassword(ver);
-    console.log(validatePassword(ver));
+   // console.log(validatePassword(ver));
       if (ver === newPassword && validatePassword(ver)) {
         setIsValid(false);
       } else {
@@ -121,7 +121,7 @@ const ChangePassword = ({ usuario }: { usuario: any }) => {
     };
 
     Servicios.ChangePassword(data).then(async (res) => {
-      console.log(res);
+    //  console.log(res);
       if (res.SUCCESS) {
         AlertS.fire({
           title: "!Exito!",

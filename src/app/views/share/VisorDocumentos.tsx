@@ -132,7 +132,7 @@ const VisorDocumentos = ({
 
     Servicios.GetDocumento(data).then((res) => {
       if (res.SUCCESS) {
-        console.log(tipoext);
+      //  console.log(tipoext);
         setfile64(res.RESPONSE);
         var bufferArray = base64ToArrayBuffer(String(res.RESPONSE));
         var blobStore = new Blob([bufferArray], { type: tipoext });
@@ -172,7 +172,7 @@ const VisorDocumentos = ({
       formData.append("CHUSER", getItem("id"));
       formData.append("FILE", item.Archivo, item.NOMBRE);
 
-      console.log(item.Archivo);
+    //  console.log(item.Archivo);
       let p = axios.post(
         process.env.REACT_APP_APPLICATION_BASE_URL + "FilesAdmin",
         formData,
@@ -225,7 +225,7 @@ const VisorDocumentos = ({
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(v);
+       // console.log(v);
         let data = {
           NUMOPERACION: 3,
           modulo: obj.modulo,

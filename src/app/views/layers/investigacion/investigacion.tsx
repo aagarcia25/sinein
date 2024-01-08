@@ -77,9 +77,9 @@ export const Investigacion = () => {
           const onProgress = (event: any) => {
             if (event.lengthComputable) {
               const percentComplete = (event.loaded / event.total) * 100;
-              console.log(
+              /*console.log(
                 `Descarga: ${percentComplete.toFixed(2)}% completada`
-              );
+              );*/
               // Aquí puedes actualizar tu interfaz de usuario con el porcentaje
             }
           };
@@ -154,7 +154,7 @@ export const Investigacion = () => {
   };
 
   const handlefiles = (v: any) => {
-    console.log(v);
+   // console.log(v);
     setVrows(v.data.row);
     setopenModalFile(true);
   };

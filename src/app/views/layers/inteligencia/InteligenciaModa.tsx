@@ -101,7 +101,7 @@ export const InteligenciaModa = ({
 
   useEffect(() => {
     if (tipo === 2) {
-      console.log(dt);
+      //console.log(dt);
       setid(dt.Id);
       setUnidadOperativa(dt.UnidadOperativa);
       setDia(dt.Dia);

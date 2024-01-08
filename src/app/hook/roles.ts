@@ -19,7 +19,7 @@ export const loadRol = () => {
     }
 
     const roles: IRoles[] = JSON.parse(decryptedData);
-    console.log(roles);
+    //console.log(roles);
 
     // Verificar si existe el rol "ADMINISTRADOR"
     const administrador = roles.find(
