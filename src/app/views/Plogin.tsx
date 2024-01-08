@@ -88,7 +88,7 @@ export const Plogin = () => {
 
             Swal.fire({
               title: "Sessiones Activas",
-              text:  "Usuario ya cuenta con una Sessión Activa, Desea Cerrar Sessión en los otros Navegadores?",
+              text:  "Usuario ya cuenta con una Sessión Activa, Desea Cerrar Sessión en  otros Navegadores?",
               icon: "warning",
               showCancelButton: true,
               confirmButtonColor: "#3085d6",
