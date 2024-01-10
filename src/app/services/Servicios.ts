@@ -1,8 +1,8 @@
-import { post, postDoc, postFile } from "./apiServiceExt";
+import { post, postDoc, postFile, postlogin } from "./apiServiceExt";
 
 export class Servicios {
   public static async login(data: any) {
-    return await post("login", data);
+    return await postlogin("login", data);
   }
 
   public static async ChangePassword(data: any) {
@@ -14,7 +14,7 @@ export class Servicios {
   }
 
   public static async logoutuser(data: any) {
-    return await post("logoutuser", data);
+    return await postlogin("logoutuser", data);
   }
 
   public static async obtenerDoc(data: any) {

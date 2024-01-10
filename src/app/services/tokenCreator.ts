@@ -1,4 +1,16 @@
+import { getItem } from "./localStorage";
+
 export const getHeaderInitial = async function () {
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+      "Access-Control-Allow-Origin": "*",
+    },
+  };
+};
+
+export const getHeaderInfologin = async function () {
   return {
     headers: {
       "Content-Type": "application/json",
@@ -14,6 +26,7 @@ export const getHeaderInfo = async function () {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
       "Access-Control-Allow-Origin": "*",
+      Session: JSON.parse(String(getItem("l7"))),
     },
   };
 };

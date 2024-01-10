@@ -1,14 +1,10 @@
-import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppRouter } from "./app/router/AppRouter";
 import { Plogin } from "./app/views/Plogin";
-import {Helmet} from "react-helmet";
 function App() {
-
-  
-  /*  useEffect(() => {
-    // Redirección de HTTP a HTTPS
-    if (
+  // Redirección de HTTP a HTTPS
+  /*  if (
       window.location.protocol !== "https:" &&
       window.location.hostname !== "localhost"
     ) {
@@ -28,15 +24,17 @@ function App() {
       return () => {
         window.removeEventListener("contextmenu", bloquearClickDerecho);
       };
-    }
-  }, []);*/
+    }*/
 
   return (
     <div>
-       <Helmet>
+      <Helmet>
         {/* Configuración de cabeceras de seguridad */}
         <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
-        <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
+        <meta
+          http-equiv="Strict-Transport-Security"
+          content="max-age=31536000; includeSubDomains; preload"
+        />
         {/* Agrega otras cabeceras según tus necesidades */}
       </Helmet>
 

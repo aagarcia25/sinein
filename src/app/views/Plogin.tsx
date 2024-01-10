@@ -32,8 +32,9 @@ export const Plogin = () => {
 
   const logout = async () => {
     try {
+      console.log(username);
       let data = {
-        nombreUsuario: encryptalaravel(username), 
+        nombreUsuario: encryptalaravel(username),
       };
       const res = await Servicios.logoutuser(data);
       if (res.SUCCESS) {
@@ -60,7 +61,7 @@ export const Plogin = () => {
     };
 
     Servicios.login(data).then((res) => {
-     // console.log(res);
+      // console.log(res);
       if (res.SUCCESS) {
         if (res.RESPONSE.login) {
           setItem(true, "l1");
@@ -68,9 +69,10 @@ export const Plogin = () => {
           setItem(encrypta(JSON.stringify(res.RESPONSE.Roles)), "l3");
           setItem(encrypta(JSON.stringify(res.RESPONSE.User.Id)), "l5");
           setItem(encrypta(JSON.stringify(res.RESPONSE.User.bp)), "l6");
-          if(!res.RESPONSE.User.bp){
+          setItem(res.RESPONSE.User.session, "l7");
+          if (!res.RESPONSE.User.bp) {
             navigate("/sinein/inicio");
-          }else{
+          } else {
             AlertS.fire({
               title: "¡Aviso!",
               text: "Contraseña Vencida, Favor de Realizar el Cambio",
@@ -78,57 +80,46 @@ export const Plogin = () => {
             });
             navigate("/sinein/cp");
           }
-
-
-         
-
-
         } else {
-          if(res.NUMCODE==2525){
-
+          if (res.NUMCODE == 2525) {
             Swal.fire({
               title: "Sessiones Activas",
-              text:  "Usuario ya cuenta con una Sessión Activa, Desea Cerrar Sessión en  otros Navegadores?",
+              text: "Usuario ya cuenta con una Sessión Activa, Desea Cerrar Sessión en  otros Navegadores?",
               icon: "warning",
               showCancelButton: true,
               confirmButtonColor: "#3085d6",
               cancelButtonColor: "#d33",
               confirmButtonText: "SI",
-              cancelButtonText:"No"
+              cancelButtonText: "No",
             }).then((result) => {
               if (result.isConfirmed) {
                 logout();
               }
             });
-            
-
-          }else{
+          } else {
             AlertS.fire({
               title: "¡Error!",
               text: res.STRMESSAGE,
               icon: "error",
             });
           }
-
-        
         }
         setslideropen(false);
       } else {
         setslideropen(false);
-        if(res.NUMCODE==429){
+        if (res.NUMCODE == 429) {
           AlertS.fire({
             title: "¡Error!",
             text: res.STRMESSAGE,
             icon: "error",
           });
-        }else{
+        } else {
           AlertS.fire({
             title: "¡Error!",
             text: "Sin Respuesta",
             icon: "error",
           });
         }
-       
       }
     });
   };
@@ -136,9 +127,8 @@ export const Plogin = () => {
   useEffect(() => {
     let flag;
     try {
-      
       flag = getItem("l1");
-      if(flag){
+      if (flag) {
         navigate("/sinein/inicio");
       }
     } catch (error) {

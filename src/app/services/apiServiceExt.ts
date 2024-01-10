@@ -1,8 +1,9 @@
 import axios from "axios";
 
-import { getHeaderInfo } from "./tokenCreator";
 import { desencryptaback, encryptalaravel } from "../helpers/cifrado";
 import { IResItem } from "../interfaces/Share";
+import { getHeaderInfo, getHeaderInfologin } from "./tokenCreator";
+import Swal from "sweetalert2";
 /**
  * MANEJO AUTOMATICO DE PETICIONES
  *
@@ -36,6 +37,17 @@ const handleResponse = (response: any) => {
     };
   }
 
+  if (response.status == 409) {
+    Swal.fire({
+      icon: "error",
+      title: "¡Error!",
+      text: "La sesión ya no es válida. Por favor, inicie sesión nuevamente.",
+    });
+    localStorage.clear();
+    // Redirigir la ventana actual a una página en blanco después de un retraso de 2 segundos (2000 milisegundos)
+    window.location.href = "https://apl-demo.clouding.mx/sinein/";
+  }
+
   try {
     const result: IResItem = JSON.parse(desencryptaback(response)) as any;
     rs = {
@@ -53,6 +65,22 @@ const handleResponse = (response: any) => {
 
 export const post = async function (url: string, body: any) {
   let header = await getHeaderInfo();
+  try {
+    let resp = await axios.post(
+      process.env.REACT_APP_APPLICATION_BASE_URL + url,
+      {
+        b: encryptalaravel(JSON.stringify(body)),
+      },
+      header
+    );
+    return handleResponse(resp.data);
+  } catch (err: any) {
+    return handleResponse(err.response);
+  }
+};
+
+export const postlogin = async function (url: string, body: any) {
+  let header = await getHeaderInfologin();
   try {
     let resp = await axios.post(
       process.env.REACT_APP_APPLICATION_BASE_URL + url,
