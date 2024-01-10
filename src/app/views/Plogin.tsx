@@ -32,7 +32,7 @@ export const Plogin = () => {
 
   const logout = async () => {
     try {
-      console.log(username);
+      //console.log(username);
       let data = {
         nombreUsuario: encryptalaravel(username),
       };
