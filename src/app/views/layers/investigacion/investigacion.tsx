@@ -114,47 +114,10 @@ export const Investigacion = () => {
         console.error("Error al obtener el documento:", error);
         Swal.fire("¡Error!", "Error al obtener el documento.", "error");
       });
-    /*Servicios.informes(data)
-      .then((res) => {
-        if (res.SUCCESS) {
-          const fileData = res.RESPONSE;
-          // Tipo MIME para archivos .docx
-          const tipoMIME =
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-          // Crear un Blob a partir de los datos y tipo de archivo
-          const blob = new Blob([base64ToArrayBuffer(String(fileData))], {
-            type: tipoMIME,
-          });
-
-          // Crear un enlace de descarga
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = v.data.row.Folio; // Puedes establecer un nombre de archivo personalizado aquí
-
-          // Simular un clic en el enlace para iniciar la descarga
-          document.body.appendChild(link);
-          link.click();
-
-          // Eliminar el enlace después de la descarga
-          document.body.removeChild(link);
-          setShow(false);
-        } else {
-          setShow(false);
-          Swal.fire("¡Error!", res.STRMESSAGE, "error");
-        }
-      })
-      .catch((error) => {
-        // Manejar errores de la petición
-        console.error("Error al obtener el documento:", error);
-        setShow(false);
-        Swal.fire("¡Error!", "Error al obtener el documento.", "error");
-      });
-  */
   };
 
   const handlefiles = (v: any) => {
-   // console.log(v);
+    // console.log(v);
     setVrows(v.data.row);
     setopenModalFile(true);
   };
