@@ -20,7 +20,7 @@ import ModalForm from "../../share/ModalForm";
 import Progress from "../../share/Progress";
 import SelectFrag from "../../share/SelectFrag";
 import VisorDocumentossub from "../../share/VisorDocumentossub";
-import Textarea from "../../share/textarea";
+import { Textarea } from "../../../helpers/inputText";
 const InvestigacionModal = ({
   handleClose,
   tipo,
@@ -55,6 +55,14 @@ const InvestigacionModal = ({
   const [Estatus, setEstatus] = useState("");
   const [Observacion, setObservacion] = useState("");
 
+  const [antecedente, setantecedente] = useState<string>("");
+  const [seguimiento, setseguimiento] = useState<string>("");
+  const [cronologia, setcronologia] = useState<string>("");
+  const [fuenteinf, setfuenteinf] = useState<string>("");
+  const [relevantes, setrelevantes] = useState<string>("");
+  const [conlusion, setconlusion] = useState<string>("");
+  const [recomendaciones, setrecomendaciones] = useState<string>("");
+
   const [ListUO, setListUO] = useState<SelectValues[]>([]);
   const [LisMeses, setLisMeses] = useState<SelectValues[]>([]);
   const [LisEstatus, setLisEstatus] = useState<SelectValues[]>([]);
@@ -73,6 +81,7 @@ const InvestigacionModal = ({
     "Relevantes",
     "Conclusión",
     "Recomendaciones",
+    "Evidencias Fotograficas",
   ];
 
   const handleFilterChange1 = (v: string) => {
@@ -90,6 +99,42 @@ const InvestigacionModal = ({
   useLoadFilter(7, setLisEstatus);
   useLoadFilter(4, setListUO);
   useLoadFilter(1, setLisMeses);
+
+  const handleSendlist = () => {
+    setShow(true);
+
+    let data = {
+      NUMOPERACION: 5,
+      CHID: id,
+      CHUSER: getItem("id"),
+      antecedente: antecedente.replace(/[\u0080-\uFFFF]/g, ""),
+      seguimiento: seguimiento.replace(/[\u0080-\uFFFF]/g, ""),
+      cronologia: cronologia.replace(/[\u0080-\uFFFF]/g, ""),
+      fuenteinf: fuenteinf.replace(/[\u0080-\uFFFF]/g, ""),
+      relevantes: relevantes.replace(/[\u0080-\uFFFF]/g, ""),
+      conlusion: conlusion.replace(/[\u0080-\uFFFF]/g, ""),
+      recomendaciones: recomendaciones.replace(/[\u0080-\uFFFF]/g, ""),
+    };
+
+    Servicios.Investigacion(data).then((res) => {
+      if (res.SUCCESS) {
+        AlertS.fire({
+          title: "!Exito!",
+          text: "Se Guardo el Registro",
+          icon: "success",
+        });
+        setShow(false);
+      } else {
+        setShow(false);
+        AlertS.fire({
+          title: "¡Error!",
+          text: "Sin Respuesta",
+          icon: "error",
+        });
+      }
+    });
+  };
+
   const handleSend = () => {
     setShow(true);
     let data = {
@@ -121,13 +166,13 @@ const InvestigacionModal = ({
 
     Servicios.Investigacion(data).then((res) => {
       if (res.SUCCESS) {
+        setid(res.RESPONSE.Id);
         AlertS.fire({
           title: "!Exito!",
           text: "Se Guardo el Registro",
           icon: "success",
         });
         setShow(false);
-        handleClose();
       } else {
         setShow(false);
         AlertS.fire({
@@ -164,6 +209,14 @@ const InvestigacionModal = ({
       setVeritas(dt.Veritas);
       setEstatus(dt.Estatus);
       setObservacion(dt.Observacion);
+
+      setantecedente(dt.Antecedente);
+      setseguimiento(dt.Seguimiento);
+      setcronologia(dt.Cronologia);
+      setfuenteinf(dt.Fuenteinf);
+      setrelevantes(dt.Relevantes);
+      setconlusion(dt.Conclusion);
+      setrecomendaciones(dt.Recomendacion);
     }
   }, [dt]);
 
@@ -191,7 +244,6 @@ const InvestigacionModal = ({
           sm={12}
           md={12}
           lg={12}
-          sx={{ padding: "2%" }}
         >
           <Grid item xs={12} sm={12} md={12} lg={2}>
             <Button
@@ -217,7 +269,7 @@ const InvestigacionModal = ({
         <Box p={2}>
           {activeStep === 0 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
+            <>
               <Grid
                 container
                 item
@@ -229,7 +281,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -302,7 +353,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -386,7 +436,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -469,7 +518,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -554,7 +602,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={6} md={3} lg={3}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -574,7 +621,9 @@ const InvestigacionModal = ({
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={3}>
-                  <Typography sx={{ fontFamily: "sans-serif" }}>PC:</Typography>
+                  <Typography sx={{ fontFamily: "sans-serif" }}>
+                    Prueba de Confianza:
+                  </Typography>
                   <TextField
                     required
                     margin="none"
@@ -630,7 +679,6 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
@@ -656,11 +704,11 @@ const InvestigacionModal = ({
                 alignItems="center"
                 justifyContent="center"
                 spacing={1}
+                padding={2}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
@@ -675,7 +723,7 @@ const InvestigacionModal = ({
                     className={tipo === 1 ? "guardar" : "actualizar"}
                     onClick={() => handleSend()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
@@ -687,23 +735,18 @@ const InvestigacionModal = ({
                     className={"actualizar"}
                     onClick={() => handleClose()}
                   >
-                    {"Salir"}
+                    {"Cancelar"}
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-            </Box>
+            </>
           )}
 
           {activeStep === 1 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Antecedente</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -715,43 +758,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta el Antecedente:
                   </Typography>
-                  {/* <Textarea
-                    value={Observacion}
-                    onChange={(v: any) => setObservacion(v.target.value)}
-                  /> */}
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={antecedente}
+                    onChange={(v) => setantecedente(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Antecedente"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -761,55 +801,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 2 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Seguimiento</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -821,39 +823,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta el Seguimiento:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={seguimiento}
+                    onChange={(v) => setseguimiento(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Seguimiento"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -863,54 +866,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 3 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Cronología</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -922,39 +888,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta la Cronologia:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={cronologia}
+                    onChange={(v) => setcronologia(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Cronologia"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -964,54 +931,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 4 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Fuente de Información</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -1023,39 +953,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta la Fuente de Información:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={fuenteinf}
+                    onChange={(v) => setfuenteinf(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Informacion"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -1065,54 +996,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 5 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Relevantes</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -1124,39 +1018,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
-                    Documenta Relevantes:
+                    Relevantes:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={relevantes}
+                    onChange={(v) => setrelevantes(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Relevantes"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -1166,54 +1061,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 6 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Conclusión</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -1225,39 +1083,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta la Conclusión:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={conlusion}
+                    onChange={(v) => setconlusion(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Conclusion"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -1267,54 +1126,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{ padding: "2%" }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+            </>
           )}
           {activeStep === 7 && (
             // Renderizar la sección de Registro
-            <Box boxShadow={3}>
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography variant="h4">Recomendaciones</Typography>
-                </Box>
-              </Grid>
+            <>
               <Grid
                 container
                 item
@@ -1326,39 +1148,40 @@ const InvestigacionModal = ({
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
                   <Typography sx={{ fontFamily: "sans-serif" }}>
                     Documenta las Recomendaciones:
                   </Typography>
-                  <TextField
-                    required
-                    margin="none"
-                    value={Observacion}
-                    type="text"
-                    fullWidth
-                    maxRows={4}
-                    variant="outlined"
-                    onChange={(v) => setObservacion(v.target.value)}
-                    autoComplete="off"
+
+                  <Textarea
+                    style={{
+                      height: "350px",
+                      width: "100%",
+                      overflow: "auto",
+                    }}
+                    value={recomendaciones}
+                    onChange={(v) => setrecomendaciones(v.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <VisorDocumentossub
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Recomendaciones"}
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 alignItems="center"
                 justifyContent="center"
-                spacing={1}
+                padding={1}
                 xs={12}
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
                 <Grid item xs={12} sm={12} md={12} lg={2}>
                   <Button
                     fullWidth
@@ -1368,26 +1191,17 @@ const InvestigacionModal = ({
                       backgroundColor: "green",
                     }}
                     className={tipo === 1 ? "guardar" : "actualizar"}
-                    onClick={() => handleSend()}
+                    onClick={() => handleSendlist()}
                   >
-                    {tipo === 1 ? "Agregar" : "Actualizar"}
+                    {tipo === 1 ? "Guardar" : "Actualizar"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
-                  <Button
-                    fullWidth
-                    startIcon={<CloseIcon />}
-                    variant="contained"
-                    color="error"
-                    className={"actualizar"}
-                    onClick={() => handleClose()}
-                  >
-                    {"Salir"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}></Grid>
               </Grid>
+            </>
+          )}
+          {activeStep === 8 && (
+            // Renderizar la sección de Registro
+            <>
               <Grid
                 container
                 alignItems="center"
@@ -1397,16 +1211,16 @@ const InvestigacionModal = ({
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ padding: "2%" }}
               >
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <VisorDocumentossub
-                    handleFunction={handleClose}
-                    tipo={"investigacion"}
+                    IdRegistro={id}
+                    Modulo={"Investigacion"}
+                    Tipo={"Evidencias"}
                   />
                 </Grid>
               </Grid>
-            </Box>
+            </>
           )}
         </Box>
       </ModalForm>

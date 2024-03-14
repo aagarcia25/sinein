@@ -16,6 +16,8 @@ import MUIXDataGrid from "../../share/MUIXDataGrid";
 import TitleComponent from "../../share/TitleComponent";
 import VisorDocumentos from "../../share/VisorDocumentos";
 import InvestigacionModal from "./InvestigacionModal";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 export const Investigacion = () => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
@@ -55,6 +57,7 @@ export const Investigacion = () => {
     setShow(true);
     const data = {
       CHID: v.data.id,
+      TIPO: "INVESTIGACION",
     };
 
     Servicios.informes(data)
@@ -105,6 +108,7 @@ export const Investigacion = () => {
 
           // Iniciar la solicitud
           xhr.send();
+          setShow(false);
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
@@ -113,6 +117,7 @@ export const Investigacion = () => {
         // Manejar errores de la petición
         console.error("Error al obtener el documento:", error);
         Swal.fire("¡Error!", "Error al obtener el documento.", "error");
+        setShow(false);
       });
   };
 
@@ -184,10 +189,17 @@ export const Investigacion = () => {
         return (
           <>
             <ButtonsShare
-              title={"Descargar Informe"}
+              title={"Descargar Informe en PDF"}
               handleFunction={dowloandfile}
               show={true}
-              icon={<FileOpenIcon />}
+              icon={<PictureAsPdfIcon />}
+              row={v}
+            />
+            <ButtonsShare
+              title={"Descargar Informe en WORD"}
+              handleFunction={dowloandfile}
+              show={true}
+              icon={<ArtTrackIcon />}
               row={v}
             />
             <ButtonsEdit
@@ -200,13 +212,6 @@ export const Investigacion = () => {
               row={v}
               show={true}
             ></ButtonsDeleted>
-            <ButtonsShare
-              title={"Visualizar Archivos"}
-              handleFunction={handlefiles}
-              show={true}
-              icon={<AttachmentIcon />}
-              row={v}
-            />
           </>
         );
       },

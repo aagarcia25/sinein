@@ -2,47 +2,51 @@ import DownloadingIcon from "@mui/icons-material/Downloading";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
-import {
-  Box,
-  DialogContent,
-  Grid,
-  IconButton,
-  ToggleButton,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, IconButton, Modal, ToggleButton } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { base64ToArrayBuffer } from "../../helpers/Files";
 import { Toast } from "../../helpers/Toast";
 import { Servicios } from "../../services/Servicios";
 import { getItem } from "../../services/localStorage";
 import ButtonsDeleted from "./ButtonsDeleted";
 import { ButtonsDetail } from "./ButtonsDetail";
-import MUIXDataGrid from "./MUIXDataGrid";
-import ModalForm from "./ModalForm";
-import Progress from "./Progress";
-import { base64ToArrayBuffer } from "../../helpers/Files";
+import MUIXDataGridFlex from "./MUIXDataGridFlex";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  boxShadow: 24,
+  p: 4,
+};
 
 const VisorDocumentossub = ({
-  handleFunction,
-  tipo,
+  IdRegistro,
+  Modulo,
+  Tipo,
 }: {
-  handleFunction: Function;
-  tipo: string;
+  IdRegistro: string;
+  Modulo: string;
+  Tipo: string;
 }) => {
-  const [openSlider, setOpenSlider] = useState(false);
-  const [verarchivo, setverarchivo] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [data, setData] = useState([]);
   const [URLruta, setURLRuta] = useState<string>("");
   const [tipoext, setTipoext] = useState<string>("");
 
-  const [file64, setfile64] = useState<string>("");
-
   const consulta = () => {
     let data = {
       NUMOPERACION: 2,
-      modulo: tipo,
+      IdRegistro: IdRegistro,
+      Modulo: Modulo,
+      Tipo: Tipo,
     };
 
     Servicios.FilesAdmin(data).then((res) => {
@@ -52,9 +56,7 @@ const VisorDocumentossub = ({
           title: "¡Consulta Exitosa!",
         });
         setData(res.RESPONSE);
-        setOpenSlider(false);
       } else {
-        setOpenSlider(false);
         Swal.fire("¡Error!", res.STRMESSAGE, "error");
       }
     });
@@ -85,16 +87,13 @@ const VisorDocumentossub = ({
           link.click();
           // Eliminar el enlace después de la descarga
           document.body.removeChild(link);
-          setOpenSlider(false);
         } else {
-          setOpenSlider(false);
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
       })
       .catch((error) => {
         // Manejar errores de la petición
         console.error("Error al obtener el documento:", error);
-        setOpenSlider(false);
         Swal.fire("¡Error!", "Error al obtener el documento.", "error");
       });
   };
@@ -112,12 +111,7 @@ const VisorDocumentossub = ({
     }
   };
 
-  const handleCloseModal = () => {
-    setverarchivo(false);
-  };
-
   const handleVer = (v: any) => {
-    setOpenSlider(true);
     setTipoext(v.row.FileName.split(".").pop());
 
     let data = {
@@ -127,7 +121,6 @@ const VisorDocumentossub = ({
     Servicios.GetDocumento(data).then((res) => {
       if (res.SUCCESS) {
         //  console.log(tipoext);
-        setfile64(res.RESPONSE);
         var bufferArray = base64ToArrayBuffer(String(res.RESPONSE));
         var blobStore = new Blob([bufferArray], { type: tipoext });
         var data = window.URL.createObjectURL(blobStore);
@@ -135,17 +128,14 @@ const VisorDocumentossub = ({
         document.body.appendChild(link);
         link.href = data;
         setURLRuta(link.href);
-        setOpenSlider(false);
-        setverarchivo(true);
+        handleOpen();
       } else {
-        setOpenSlider(false);
         Swal.fire("¡Error!", res.STRMESSAGE, "error");
       }
     });
   };
 
   const ProcesaSPeis = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOpenSlider(true);
     let count = 0;
     let encontrados: any[] = [];
     let counfiles = event?.target?.files?.length;
@@ -161,20 +151,21 @@ const VisorDocumentossub = ({
     encontrados.map((item: any) => {
       const formData = new FormData();
       formData.append("NUMOPERACION", "1");
-      formData.append("modulo", tipo);
-      //  formData.append("modulo_id", obj.Id);
+      formData.append("IdRegistro", IdRegistro);
+      formData.append("Modulo", Modulo);
+      formData.append("Tipo", Tipo);
       formData.append("CHUSER", getItem("id"));
       formData.append("FILE", item.Archivo, item.NOMBRE);
 
-      //  console.log(item.Archivo);
       let p = axios.post(
-        process.env.REACT_APP_APPLICATION_BASE_URL + "FilesAdmin",
+        process.env.REACT_APP_APPLICATION_BASE_URL + "SaveFiles",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
             "X-Requested-With": "XMLHttpRequest",
             "Access-Control-Allow-Origin": "*",
+            Session: JSON.parse(String(getItem("l7"))),
           },
         }
       );
@@ -192,7 +183,6 @@ const VisorDocumentossub = ({
 
       if (count == 0 || count == -1) {
         Swal.fire("¡Error!", "No se Realizo la Operación", "error");
-        setOpenSlider(false);
       } else {
         Swal.fire({
           icon: "success",
@@ -201,7 +191,6 @@ const VisorDocumentossub = ({
           confirmButtonText: "Ok",
         }).then((result) => {
           if (result.isConfirmed) {
-            setOpenSlider(false);
             consulta();
           }
         });
@@ -288,7 +277,6 @@ const VisorDocumentossub = ({
         );
       },
     },
-    { field: "FechaCreacion", headerName: "Fecha de Creación", width: 150 },
     {
       field: "FileName",
       description: "Nombre",
@@ -303,10 +291,6 @@ const VisorDocumentossub = ({
 
   return (
     <div>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography variant="h4">Imagenes de Evidencia</Typography>
-      </Box>
-
       <ToggleButton value="check">
         <IconButton
           color="primary"
@@ -325,23 +309,44 @@ const VisorDocumentossub = ({
           <FileUploadIcon />
         </IconButton>
       </ToggleButton>
-      <MUIXDataGrid columns={columns} rows={data} />
+      <MUIXDataGridFlex columns={columns} rows={data} />
 
-      {verarchivo ? (
-        <ModalForm title={"Visualización"} handleClose={handleCloseModal}>
-          <DialogContent
-            dividers={true}
-            style={{ width: "100%", height: "600px" }}
-          >
+      {open ? (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
             <Grid
               container
               spacing={1}
               style={{ width: "100%", height: "100%" }}
             >
-              {tipoext === "jpg" ? <img src={URLruta} alt="Archivo" /> : ""}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 400,
+                  border: "2px solid #000",
+                  padding: 16,
+                }}
+              >
+                <img
+                  src={URLruta}
+                  alt="Archivo"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
+              </div>
             </Grid>
-          </DialogContent>
-        </ModalForm>
+          </Box>
+        </Modal>
       ) : (
         ""
       )}
