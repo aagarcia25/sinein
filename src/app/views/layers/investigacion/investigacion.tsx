@@ -58,6 +58,7 @@ export const Investigacion = () => {
     const data = {
       CHID: v.data.id,
       TIPO: "INVESTIGACION",
+      SALIDA: v.tipo,
     };
 
     Servicios.informes(data)
@@ -188,19 +189,21 @@ export const Investigacion = () => {
       renderCell: (v: any) => {
         return (
           <>
-            <ButtonsShare
+            {/* <ButtonsShare
               title={"Descargar Informe en PDF"}
               handleFunction={dowloandfile}
               show={true}
               icon={<PictureAsPdfIcon />}
               row={v}
-            />
+              tipo={"pdf"}
+            /> */}
             <ButtonsShare
               title={"Descargar Informe en WORD"}
               handleFunction={dowloandfile}
               show={true}
               icon={<ArtTrackIcon />}
               row={v}
+              tipo={"word"}
             />
             <ButtonsEdit
               handleAccion={handleEdit}

@@ -7,12 +7,14 @@ const ButtonsShare = ({
   show,
   icon,
   row,
+  tipo,
 }: {
   title: string;
   handleFunction: Function;
   show: boolean;
   icon: ReactNode;
   row: any;
+  tipo: string;
 }) => {
   return (
     <>
@@ -20,7 +22,7 @@ const ButtonsShare = ({
         <Tooltip title={title}>
           <IconButton
             color="inherit"
-            onClick={() => handleFunction({ data: row })}
+            onClick={() => handleFunction({ data: row, tipo: tipo })}
           >
             {icon}
           </IconButton>
