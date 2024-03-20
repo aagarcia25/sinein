@@ -19,7 +19,7 @@ const ButtonsEdit = ({
             color="inherit"
             onClick={() => handleAccion({ data: row, tipo: 1 })}
           >
-            <ModeEditOutlineIcon />
+            <ModeEditOutlineIcon color="info" />
           </IconButton>
         </Tooltip>
       ) : (

@@ -11,6 +11,7 @@ import { Servicios } from "../../../services/Servicios";
 import Swal from "sweetalert2";
 import { getItem } from "../../../services/localStorage";
 import { AlertS } from "../../../helpers/AlertS";
+import { desencrypta } from "../../../helpers/cifrado";
 
 export const Analisis = () => {
   const [show, setShow] = useState(false);
@@ -42,7 +43,7 @@ export const Analisis = () => {
         let data = {
           NUMOPERACION: 3,
           CHID: v.data.row.Id,
-          CHUSER: getItem("id"),
+          CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
         };
 
         Servicios.Analisis(data).then((res) => {

@@ -1,11 +1,11 @@
-import AttachmentIcon from "@mui/icons-material/Attachment";
-import FileOpenIcon from "@mui/icons-material/FileOpen";
+import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 import { Grid } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { AlertS } from "../../../helpers/AlertS";
 import { base64ToArrayBuffer } from "../../../helpers/Files";
+import { desencrypta } from "../../../helpers/cifrado";
 import { Servicios } from "../../../services/Servicios";
 import { getItem } from "../../../services/localStorage";
 import ButtonsAdd from "../../share/ButtonsAdd";
@@ -16,8 +16,6 @@ import MUIXDataGrid from "../../share/MUIXDataGrid";
 import TitleComponent from "../../share/TitleComponent";
 import VisorDocumentos from "../../share/VisorDocumentos";
 import InvestigacionModal from "./InvestigacionModal";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 export const Investigacion = () => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
@@ -151,7 +149,7 @@ export const Investigacion = () => {
         let data = {
           NUMOPERACION: 3,
           CHID: v.data.row.Id,
-          CHUSER: getItem("id"),
+          CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
         };
 
         Servicios.Investigacion(data).then((res) => {

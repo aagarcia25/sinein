@@ -19,6 +19,17 @@ const handleResponseDoc = (response: any) => {
   };
   return rs;
 };
+
+const handleResponsesimple = (response: any) => {
+  let rs;
+  rs = {
+    RESPONSE: response.RESPONSE,
+    SUCCESS: response.SUCCESS,
+    NUMCODE: response.NUMCODE,
+    STRMESSAGE: response.STRMESSAGE,
+  };
+  return rs;
+};
 const handleResponse = (response: any) => {
   let rs: IResItem = {
     RESPONSE: "",
@@ -61,6 +72,20 @@ const handleResponse = (response: any) => {
   }
 
   return rs;
+};
+
+export const postsiple = async function (url: string, body: any) {
+  let header = await getHeaderInfo();
+  try {
+    let resp = await axios.post(
+      process.env.REACT_APP_APPLICATION_BASE_URL + url,
+      body,
+      header
+    );
+    return handleResponsesimple(resp.data);
+  } catch (err: any) {
+    return handleResponsesimple(err.response);
+  }
 };
 
 export const post = async function (url: string, body: any) {

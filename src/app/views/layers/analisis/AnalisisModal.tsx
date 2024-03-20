@@ -12,6 +12,7 @@ import CustomizedDate from "../../share/CustomizedDate";
 import ModalForm from "../../share/ModalForm";
 import Progress from "../../share/Progress";
 import SelectFrag from "../../share/SelectFrag";
+import { desencrypta } from "../../../helpers/cifrado";
 export const AnalisisModal = ({
   handleClose,
   tipo,
@@ -68,7 +69,7 @@ export const AnalisisModal = ({
       Observacion: Observacion,
       Actualizacion: Actualizacion,
       FolioInterno: FolioInterno,
-      CHUSER: getItem("id"),
+      CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
     };
 
     Servicios.Analisis(data).then((res) => {

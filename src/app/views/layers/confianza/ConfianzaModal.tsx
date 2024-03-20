@@ -12,6 +12,7 @@ import { getItem } from "../../../services/localStorage";
 import { AlertS } from "../../../helpers/AlertS";
 import { SelectValues } from "../../../interfaces/Share";
 import SelectFrag from "../../share/SelectFrag";
+import { desencrypta } from "../../../helpers/cifrado";
 export const ConfianzaModal = ({
   handleClose,
   tipo,
@@ -62,7 +63,7 @@ export const ConfianzaModal = ({
       FechaAplicacion: fa,
       FechaNuevaAplicacion: fna,
       Observaciones: observacion,
-      CHUSER: getItem("id"),
+      CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
     };
 
     Servicios.Prueba(data).then((res) => {

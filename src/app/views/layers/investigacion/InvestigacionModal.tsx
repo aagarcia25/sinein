@@ -21,6 +21,7 @@ import Progress from "../../share/Progress";
 import SelectFrag from "../../share/SelectFrag";
 import VisorDocumentossub from "../../share/VisorDocumentossub";
 import { Textarea } from "../../../helpers/inputText";
+import { desencrypta } from "../../../helpers/cifrado";
 const InvestigacionModal = ({
   handleClose,
   tipo,
@@ -106,7 +107,7 @@ const InvestigacionModal = ({
     let data = {
       NUMOPERACION: 5,
       CHID: id,
-      CHUSER: getItem("id"),
+      CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
       antecedente: antecedente.replace(/[\u0080-\uFFFF]/g, ""),
       seguimiento: seguimiento.replace(/[\u0080-\uFFFF]/g, ""),
       cronologia: cronologia.replace(/[\u0080-\uFFFF]/g, ""),
@@ -140,7 +141,7 @@ const InvestigacionModal = ({
     let data = {
       CHID: id,
       NUMOPERACION: tipo,
-      CHUSER: getItem("id"),
+      CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
       UnidadOperativa: UnidadOperativa,
       Dia: Dia,
       Mes: Mes,

@@ -1,4 +1,4 @@
-import { post, postDoc, postFile, postlogin } from "./apiServiceExt";
+import { post, postDoc, postFile, postlogin, postsiple } from "./apiServiceExt";
 
 export class Servicios {
   public static async login(data: any) {
@@ -29,7 +29,10 @@ export class Servicios {
     return await post("Investigacion", data);
   }
   public static async Inteligencia(data: any) {
-    return await post("Inteligencia", data);
+    return await postsiple("Inteligencia", data);
+  }
+  public static async Empleos(data: any) {
+    return await post("Empleos", data);
   }
   public static async Analisis(data: any) {
     return await post("Analisis", data);
@@ -50,6 +53,10 @@ export class Servicios {
 
   public static async GetDocumento(data: any) {
     return await post("GetDocumento", data);
+  }
+
+  public static async GetImageInteligencia(data: any) {
+    return await post("GetImageInteligencia", data);
   }
 
   public static async usuarios(data: any) {

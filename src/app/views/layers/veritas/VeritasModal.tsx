@@ -12,6 +12,7 @@ import { useLoadFilter } from "../../../hook/select";
 import { AlertS } from "../../../helpers/AlertS";
 import { Servicios } from "../../../services/Servicios";
 import { getItem } from "../../../services/localStorage";
+import { desencrypta } from "../../../helpers/cifrado";
 export const VeritasModal = ({
   handleClose,
   tipo,
@@ -68,7 +69,7 @@ export const VeritasModal = ({
       FechaAplicacion: fa,
       FechaNuevaAplicacion: fna,
       Observaciones: observacion,
-      CHUSER: getItem("id"),
+      CHUSER: JSON.parse(desencrypta(JSON.parse(String(getItem("l5"))))),
     };
 
     Servicios.Veritas(data).then((res) => {

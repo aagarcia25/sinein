@@ -19,7 +19,7 @@ const ButtonsDeleted = ({
             color="inherit"
             onClick={() => handleAccion({ data: row, tipo: 2 })}
           >
-            <DeleteForeverIcon />
+            <DeleteForeverIcon color="error" />
           </IconButton>
         </Tooltip>
       ) : (
