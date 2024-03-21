@@ -30,11 +30,8 @@ export const CardC = ({
     <div>
       <Card sx={{ ...cardStyle, position: "relative" }}>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div" align="center">
             {name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {descripcion}
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={textStyle}>
             {valor}
@@ -50,7 +47,7 @@ export const CardC = ({
             zIndex: 1, // Aumenta el z-index
           }}
         >
-          <AssignmentLate fontSize="large" />
+          <AssignmentLate fontSize="medium" />
         </IconButton>
       </Card>
     </div>

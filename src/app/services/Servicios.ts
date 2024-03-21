@@ -62,4 +62,8 @@ export class Servicios {
   public static async usuarios(data: any) {
     return await post("usuarios", data);
   }
+
+  public static async Graficas(data: any) {
+    return await post("Graficas", data);
+  }
 }
