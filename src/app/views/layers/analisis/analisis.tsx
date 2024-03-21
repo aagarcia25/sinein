@@ -100,7 +100,7 @@ export const Analisis = () => {
     setShow(true);
     const data = {
       CHID: v.data.id,
-      TIPO: "ANALAISIS",
+      TIPO: "ANALISIS",
       SALIDA: v.tipo,
     };
 

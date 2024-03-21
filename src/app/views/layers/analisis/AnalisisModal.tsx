@@ -134,7 +134,7 @@ export const AnalisisModal = ({
       Bibliografia: Bibliografia.replace(/[\u0080-\uFFFF]/g, ""),
     };
 
-    const res = await Servicios.Inteligencia(data);
+    const res = await Servicios.Analisis(data);
     if (res.SUCCESS) {
       console.log(res.RESPONSE);
       AlertS.fire({
@@ -194,16 +194,17 @@ export const AnalisisModal = ({
       NumeroEmergencia: NumeroEmergencia,
       Bibliografia: Bibliografia,
     };
-    console.log(data);
     Servicios.Analisis(data).then((res) => {
       if (res.SUCCESS) {
+        setid(res.RESPONSE.Id);
+        setFolio(res.RESPONSE.Folio);
         AlertS.fire({
           title: "!Exito!",
           text: "Se Guardo el Registro",
           icon: "success",
         });
         setShow(false);
-        handleClose();
+        //handleClose();
       } else {
         setShow(false);
         AlertS.fire({
@@ -220,6 +221,7 @@ export const AnalisisModal = ({
 
   useEffect(() => {
     if (tipo === 2) {
+      console.log(dt);
       setid(dt.Id);
       setFolio(dt.Folio);
       setAsunto(dt.Asunto);
@@ -359,6 +361,7 @@ export const AnalisisModal = ({
                   size="small"
                   style={{ height: "40px" }}
                   autoComplete="off"
+                  disabled
                 />
               </Grid>
             </Grid>
